@@ -1,0 +1,3 @@
+# Project exclude paths
+/argus-lib/target/
+/example/target/
