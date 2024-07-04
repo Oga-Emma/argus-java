@@ -1,49 +1,39 @@
 package com.github.ogaemma.argus;
 
+import com.github.ogaemma.argus.helper.Constants;
+
 import java.io.*;
 import java.net.Socket;
 
 public class ArgusTCPServer {
 
     private Socket socket;
-    private PrintWriter printWriter;
-    BufferedReader bufferedReader;
+    DataOutputStream dataOutputStream;
     DataInputStream dataInputStream;
 
     public ArgusTCPServer() {
     }
 
     public Socket startConnection(String host, String port) throws IOException {
-        socket = this.getSocket(host, port);
-        printWriter = new PrintWriter(socket.getOutputStream(), true);
-        bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        String hostName = !host.isBlank() ? host : Constants.DEFAULT_HOST;
+        int portNumber = Integer.parseInt(!port.isBlank() ? port : Constants.DEFAULT_PORT);
+
+        socket = new Socket(hostName, portNumber);
+
+        dataOutputStream = new DataOutputStream(socket.getOutputStream());
         dataInputStream = new DataInputStream(socket.getInputStream());
 
         return socket;
     }
 
-    private Socket getSocket(String host, String port) throws IOException {
-        if (socket == null || socket.isClosed()) {
-            String DEFAULT_HOST = "127.0.0.1";
-            String hostName = !host.isBlank() ? host : DEFAULT_HOST;
-
-            String DEFAULT_PORT = "1337";
-            int portNumber = Integer.parseInt(!port.isBlank() ? port : DEFAULT_PORT);
-
-            socket = new Socket(hostName, portNumber);
-        }
-
-        return socket;
-    }
-
     public void closeConnection() throws IOException {
-        bufferedReader.close();
-        printWriter.close();
+        dataInputStream.close();
+        dataOutputStream.close();
         socket.close();
     }
 
-    public void sendData(String connectionString) {
-        printWriter.write(connectionString);
+    public void sendData(String connectionString) throws IOException {
+        dataOutputStream.write(connectionString.getBytes());
     }
 
     public int readByte(byte[] buffer) throws IOException {

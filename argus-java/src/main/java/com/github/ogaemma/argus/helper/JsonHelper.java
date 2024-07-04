@@ -4,7 +4,6 @@ import com.fasterxml.jackson.jr.ob.JSON;
 import com.github.ogaemma.argus.model.ArgusEvent;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
@@ -20,7 +19,6 @@ public class JsonHelper {
     }
 
     public static ArgusEvent parseJson(String data) throws IOException {
-        System.out.println("Deserializing: " + data);
         Map<String, Object> map = JSON.std
                 .with(JSON.Feature.PRETTY_PRINT_OUTPUT)
                 .mapFrom(data);

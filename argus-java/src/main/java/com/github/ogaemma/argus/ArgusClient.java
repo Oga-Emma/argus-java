@@ -22,7 +22,7 @@ public class ArgusClient extends Thread {
     }
 
     /**
-     * Starts a connection to argus server in a separate thread.
+     * Starts a connection to argus server in a new thread.
      */
     @Override
     public void run() {
@@ -57,6 +57,10 @@ public class ArgusClient extends Thread {
         this.start();
     }
 
+    /**
+     * Closes all connection and kills the thread.
+     * @throws IOException - IOException
+     */
     public void disconnect() throws IOException {
         eventCallback = null;
         argusServer.closeConnection();
@@ -65,8 +69,9 @@ public class ArgusClient extends Thread {
 
     /**
      * Sends authentication data to argus server
+     * @throws IOException - IOException
      */
-    private void authenticate() {
+    private void authenticate() throws IOException {
         String connectionString = String.format("<ArgusAuth>%s:%s</ArgusAuth>", argusConfig.getUsername(), argusConfig.getPassword());
         argusServer.sendData(connectionString);
     }
