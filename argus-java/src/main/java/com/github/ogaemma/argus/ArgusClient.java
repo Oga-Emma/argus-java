@@ -1,11 +1,12 @@
 package com.github.ogaemma.argus;
 
-import com.github.ogaemma.argus.helper.Constants;
-import com.github.ogaemma.argus.helper.JsonHelper;
+import com.github.ogaemma.argus.core.ArgusTCPServer;
+import com.github.ogaemma.argus.utils.Constants;
+import com.github.ogaemma.argus.utils.JsonHelper;
 import com.github.ogaemma.argus.model.ArgusConfig;
 import com.github.ogaemma.argus.model.ArgusEvent;
-import com.github.ogaemma.argus.model.ArgusException;
-import com.github.ogaemma.argus.model.EventCallback;
+import com.github.ogaemma.argus.exception.ArgusException;
+import com.github.ogaemma.argus.core.ArgusEventListener;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -14,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 public class ArgusClient extends Thread {
     private final ArgusConfig argusConfig;
     private final ArgusTCPServer argusServer;
-    private EventCallback eventCallback;
+    private ArgusEventListener argusEventListener;
 
     public ArgusClient(ArgusTCPServer argusServer, ArgusConfig argusConfig) {
         this.argusConfig = argusConfig;
@@ -37,9 +38,11 @@ public class ArgusClient extends Thread {
 
                 if (JsonHelper.isJson(data)) {
                     ArgusEvent argusEvent = JsonHelper.parseJson(data);
-                    eventCallback.onEventReceived(argusEvent);
+                    argusEventListener.onEvent(argusEvent);
                 } else {
-                    System.out.println(data);
+                    String message = "Invalid json received: " + data;
+                    ArgusException argusException = new ArgusException(message);
+                    argusEventListener.onException(argusException);
                 }
             }
 
@@ -50,10 +53,10 @@ public class ArgusClient extends Thread {
 
     /**
      * Starts argus server
-     * @param eventCallback - event callback
+     * @param argusEventListener - event callback
      */
-    public void listenToEvents(EventCallback eventCallback) {
-        this.eventCallback = eventCallback;
+    public void listen(ArgusEventListener argusEventListener) {
+        this.argusEventListener = argusEventListener;
         this.start();
     }
 
@@ -61,8 +64,8 @@ public class ArgusClient extends Thread {
      * Closes all connection and kills the thread.
      * @throws IOException - IOException
      */
-    public void disconnect() throws IOException {
-        eventCallback = null;
+    public void close() throws IOException {
+        argusEventListener = null;
         argusServer.closeConnection();
         interrupt();
     }
@@ -73,6 +76,6 @@ public class ArgusClient extends Thread {
      */
     private void authenticate() throws IOException {
         String connectionString = String.format("<ArgusAuth>%s:%s</ArgusAuth>", argusConfig.getUsername(), argusConfig.getPassword());
-        argusServer.sendData(connectionString);
+        argusServer.writeByte(connectionString.getBytes(StandardCharsets.UTF_8));
     }
 }

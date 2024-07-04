@@ -1,4 +1,4 @@
-package com.github.ogaemma.argus.model;
+package com.github.ogaemma.argus.exception;
 
 public class ArgusException extends RuntimeException {
 

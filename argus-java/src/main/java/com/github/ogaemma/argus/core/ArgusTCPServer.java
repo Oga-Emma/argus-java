@@ -1,6 +1,6 @@
-package com.github.ogaemma.argus;
+package com.github.ogaemma.argus.core;
 
-import com.github.ogaemma.argus.helper.Constants;
+import com.github.ogaemma.argus.utils.Constants;
 
 import java.io.*;
 import java.net.Socket;
@@ -10,9 +10,6 @@ public class ArgusTCPServer {
     private Socket socket;
     DataOutputStream dataOutputStream;
     DataInputStream dataInputStream;
-
-    public ArgusTCPServer() {
-    }
 
     public Socket startConnection(String host, String port) throws IOException {
         String hostName = !host.isBlank() ? host : Constants.DEFAULT_HOST;
@@ -32,8 +29,8 @@ public class ArgusTCPServer {
         socket.close();
     }
 
-    public void sendData(String connectionString) throws IOException {
-        dataOutputStream.write(connectionString.getBytes());
+    public void writeByte(byte[] bytes) throws IOException {
+        dataOutputStream.write(bytes);
     }
 
     public int readByte(byte[] buffer) throws IOException {

@@ -1,4 +1,4 @@
-package com.github.ogaemma.argus.helper;
+package com.github.ogaemma.argus.utils;
 
 public class Constants {
     public static final String DEFAULT_HOST = "127.0.0.1";

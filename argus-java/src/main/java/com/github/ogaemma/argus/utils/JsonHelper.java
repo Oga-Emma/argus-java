@@ -1,4 +1,4 @@
-package com.github.ogaemma.argus.helper;
+package com.github.ogaemma.argus.utils;
 
 import com.fasterxml.jackson.jr.ob.JSON;
 import com.github.ogaemma.argus.model.ArgusEvent;
@@ -8,9 +8,11 @@ import java.time.OffsetDateTime;
 import java.util.Map;
 
 public class JsonHelper {
-    public static Boolean isJson(String data){
+    public static Boolean isJson(String data) {
         try {
-            JSON.std.mapFrom(data);
+            JSON.std
+                    .with(JSON.Feature.PRETTY_PRINT_OUTPUT)
+                    .mapFrom(data);
         } catch (IOException e) {
             return false;
         }
