@@ -65,7 +65,7 @@ public class ArgusClient extends Thread {
     }
 
     /**
-     * Closes all connection and kills the thread.
+     * Closes all connection and attempts to stop the thread.
      */
     public void close() {
         stopAll();
