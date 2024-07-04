@@ -46,13 +46,17 @@ public class ArgusClient extends Thread {
                 }
             }
 
-        } catch (Exception ex) {
-            throw new ArgusException(ex.getMessage());
+        } catch (IOException ex) {
+            throw new ArgusException(ex);
+        } finally {
+            stopAll();
         }
     }
 
+
     /**
      * Starts argus server
+     *
      * @param argusEventListener - event callback
      */
     public void listen(ArgusEventListener argusEventListener) {
@@ -62,16 +66,27 @@ public class ArgusClient extends Thread {
 
     /**
      * Closes all connection and kills the thread.
-     * @throws IOException - IOException
      */
-    public void close() throws IOException {
-        argusEventListener = null;
-        argusServer.closeConnection();
+    public void close() {
+        stopAll();
         interrupt();
     }
 
     /**
+     * Closes all connection and kills the thread.
+     */
+    private void stopAll() {
+        try {
+            argusEventListener = null;
+            argusServer.closeConnection();
+        } catch (IOException e) {
+            throw new ArgusException(e);
+        }
+    }
+
+    /**
      * Sends authentication data to argus server
+     *
      * @throws IOException - IOException
      */
     private void authenticate() throws IOException {
