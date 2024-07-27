@@ -29,8 +29,6 @@ public class ArgusClient extends Thread {
     public void run() {
         try (Socket ignored = argusServer.startConnection(argusConfig.getHost(), argusConfig.getPort())) {
             authenticate();
-
-            System.out.println("Listening to event");
             byte[] buffer = new byte[Constants.DEFAULT_BUFFER_SIZE];
 
             while (argusServer.readByte(buffer) > 0) {

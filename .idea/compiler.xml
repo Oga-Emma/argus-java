@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="argus-java (1)" />
         <module name="example" />
+        <module name="argus-java" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
