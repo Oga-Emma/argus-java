@@ -3,16 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.github.ogaemma</groupId>
         <artifactId>argus</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
-    <name>argus-java</name>
+<!--    <name>Java library for [ARGUS Engine](https://github.com/Khelechy/argus)</name>-->
+    <description>A simple library for generating UUIDs.</description>
+    <url>https://github.com/Oga-Emma/argus-java</url>
+
     <artifactId>argus-java</artifactId>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.github.com</url>
+    <version>1.0.0</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -21,12 +24,22 @@
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.25.3</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.jr</groupId>
             <artifactId>jackson-jr-all</artifactId>
@@ -79,4 +92,87 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+
+    <developers>
+        <developer>
+            <name>Emmanuel Ani</name>
+            <email>sevenapps2018@gmail.com</email>
+            <organization>Argus</organization>
+            <organizationUrl>https://thegreatapi.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/Oga-Emma/argus-java</url>
+        <connection>scm:git:git://github.com/Oga-Emma/argus-java.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Oga-Emma/argus-java.git</developerConnection>
+    </scm>
+
 </project>
